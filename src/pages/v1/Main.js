@@ -31,6 +31,7 @@ export default function Main() {
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [isTransectionsOpen, setIsTransectionsOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
     initData();
@@ -125,6 +126,12 @@ export default function Main() {
     if (!res._error) {
       setPaymentStatus(1);
       setChangeResItems(res.data);
+      setErrorText("");
+    } else {
+      // console.log("res._error_data", res._error_data.response.data.message);
+      setPaymentStatus(2);
+      setErrorText(res._error_data.response.data.message);
+      //const [errorText, setErrorText] = useState("");
     }
   };
 
@@ -348,6 +355,7 @@ export default function Main() {
         >
           <h1>เงินที่ต้องทอน</h1>
           {paymentStatus === 0 && <div>- - - รอยืนยันการชำระเงิน - - -</div>}
+          {paymentStatus === 2 && <div>- - - {errorText} - - -</div>}
           {paymentStatus === 1 && (
             <div>
               {changeResItems.map((v) => (
